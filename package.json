@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "valley-roads",
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs"
+  },
+  "devDependencies": {
+    "acorn": "^8.14.0",
+    "esbuild": "^0.28.0",
+    "terser": "^5.40.0",
+    "three": "0.186.0"
+  }
+}

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" class="menu-open">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Valley Roads</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#121d1a;color:#f8f5e9;font:15px system-ui,sans-serif;overflow:hidden}#view{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}.panel{background:#101b18ed;border:1px solid #ffffff28;border-radius:13px;padding:16px}.top{position:absolute;top:18px;left:18px;display:flex;gap:18px;align-items:center}.brand{font:italic 800 28px Georgia,serif;white-space:nowrap}.brand span{color:#dfeb98}button,input,select{font:inherit;background:#26362e;color:inherit;border:1px solid #ffffff38;border-radius:7px;padding:8px 10px}button{cursor:pointer}button:hover{background:#465849}button:focus-visible,input:focus-visible{outline:2px solid #dfeb98}input{width:100px}select{max-width:184px}.gear{font-variant-numeric:tabular-nums}.map{position:absolute;top:18px;right:18px;padding:8px;text-align:center}.map canvas{display:block;width:172px;height:172px}.map button{display:block;margin:4px auto 0;padding:3px 8px;font-size:12px;color:#d5ddc9}.dash{position:absolute;bottom:18px;left:18px;min-width:205px}.speed{font-size:43px;font-weight:750;line-height:1;font-variant-numeric:tabular-nums}.muted{color:#c3cebd}.route{margin-top:9px;color:#e6ef9c}.controls{position:absolute;bottom:18px;right:18px;display:flex;gap:7px;align-items:center}.touch{display:none;position:absolute;inset:auto 12px 13px;justify-content:space-between;pointer-events:none}.touch button{pointer-events:auto;touch-action:none;font-size:23px;min-width:50px;min-height:50px}#interact{position:absolute;left:50%;bottom:98px;transform:translateX(-50%);padding:9px 14px;white-space:nowrap;z-index:2}.error{position:absolute;inset:40% 15% auto}.error[hidden]{display:none}@media(max-width:1000px){.controls small{display:none}.top{max-width:calc(100% - 224px);flex-wrap:wrap}}@media(max-width:640px){.top{top:8px;left:8px;padding:9px;gap:6px;flex-wrap:wrap;max-width:calc(100% - 128px)}.brand{font-size:21px;width:100%}.map{top:8px;right:8px}.map canvas{width:94px;height:94px}.controls{bottom:8px;right:8px;padding:6px}.controls small{display:none}.controls{max-width:calc(100% - 16px);flex-wrap:wrap;justify-content:flex-end}.dash{bottom:8px;left:8px;min-width:0;padding:9px}.speed{font-size:32px}}@media(pointer:coarse){.touch{display:flex}.dash,.controls{bottom:78px}}
+.clear-view .dash,.clear-view .map{display:none}#police-status{position:absolute;left:50%;top:18px;transform:translateX(-50%);color:#ffe1a0;pointer-events:none;text-align:center}#police-status[hidden]{display:none}#job{position:absolute;left:50%;top:74px;transform:translateX(-50%);padding:9px 14px;color:#ffd9a0;pointer-events:none;text-align:center;max-width:min(640px,calc(100% - 220px));z-index:2}#job[hidden]{display:none}#goal{position:absolute;left:50%;top:128px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 12px;color:#ffd9a0;pointer-events:none;font-variant-numeric:tabular-nums;z-index:2}#goal[hidden]{display:none}#goal-arrow{display:block}@media(max-width:760px){#police-status{top:108px}}
+
+#main-menu{position:fixed;inset:0;display:flex;align-items:flex-end;background:linear-gradient(90deg,#111b19ed 0%,#111b19a0 25%,transparent 69%),linear-gradient(0deg,#111b19c9,transparent 55%);z-index:4}
+#main-menu[hidden]{display:none}
+.menu-content{margin:0 0 clamp(22px,7vh,88px) clamp(20px,7vw,112px);max-width:calc(100vw - clamp(40px,14vw,224px));max-height:calc(100dvh - clamp(38px,9vh,104px));overflow:auto;padding:6px}
+.menu-content h1{margin:0;line-height:.83;font:italic 700 clamp(54px,11vw,148px)/.83 Georgia,serif;letter-spacing:-.073em;color:#f9f4e5;text-shadow:0 4px 42px #08110c5e}
+.menu-content h1 em{color:#e1eb9e;font-style:inherit}
+.menu-primary{display:flex;align-items:center;gap:14px;margin-top:27px}
+#preview-status{color:#e9edda;font-size:13px}
+#picture-crisp{margin-inline-start:6px;padding:5px 13px;border-radius:999px;font-weight:650}
+#picture-crisp[aria-pressed="true"]{background:#e0eaa2;color:#1d291d;border-color:#e3eda7}
+#picture-crisp:focus-visible{outline:2px solid #fff8d2;outline-offset:3px}
+#freestyle{display:flex;align-items:center;justify-content:space-between;min-width:182px;gap:28px;background:#e0eaa2;color:#1d291d;border-color:#e3eda7;padding:13px 17px 13px 20px;font-weight:750}
+.options{margin-top:18px;color:#e9edda;max-width:520px}.options>summary{cursor:pointer;opacity:.75;width:fit-content}.options[open]>summary{opacity:1}.options>*:not(summary){margin-left:0}.graphics-settings{display:flex;gap:10px;align-items:center;margin-top:16px;color:#e9edda}
+#freestyle:hover{background:#f1f4c3}
+#freestyle:disabled{opacity:.57;cursor:wait}
+#freestyle:focus-visible{outline:2px solid #fff8d2;outline-offset:4px}
+.menu-open .top,.menu-open .map,.menu-open .dash,.menu-open .controls,.menu-open .touch,.menu-open #interact,.menu-open #police-status,.menu-open #job,.menu-open #goal{display:none}
+#wrong-way{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);padding:8px 14px;color:#fff4eb;background:#8a2027e8;pointer-events:none;z-index:3}
+.menu-open #wrong-way{display:none}
+.error{z-index:8}
+#limit{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#fbfaf4;border:6px solid #c5161d;color:#14161a;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}#limit.over{animation:limit .55s steps(2) infinite}@keyframes limit{50%{background:#ffd9d4}}.limit-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+#seed-input{width:150px;min-width:0}.custom-world{margin-top:12px;color:#e9edda;max-width:430px}.custom-world summary{cursor:pointer;font-weight:650}#world-sliders{display:grid;gap:6px;margin-top:9px;padding:11px;background:#101b18d9;border:1px solid #ffffff28;border-radius:9px}.world-slider{display:grid;grid-template-columns:minmax(90px,136px) minmax(45px,1fr) 42px;gap:9px;align-items:center;font-size:14px}.world-slider input{width:100%;padding:0;accent-color:#dfeb98}.world-slider output{text-align:right;font-variant-numeric:tabular-nums}
+#replay-banner{position:fixed;left:50%;top:22px;transform:translateX(-50%);margin:0;padding:9px 16px;z-index:5;white-space:nowrap;letter-spacing:.04em}#replay-banner[hidden]{display:none}.replay-mode .top,.replay-mode .map,.replay-mode .dash,.replay-mode .controls,.replay-mode .touch,.replay-mode #interact,.replay-mode #police-status,.replay-mode #job,.replay-mode #goal,.replay-mode #wrong-way,.replay-mode #stack{display:none}
+.fuel-row{display:flex;align-items:center;gap:7px;margin-top:6px;font-size:13px}.fuel-bar{width:74px;height:8px;background:#ffffff24;border-radius:4px;overflow:hidden}#fuel-level{display:block;height:100%;background:#dfeb98}#fuel-level.low{background:#ef6a4f}
+#pump{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,calc(100% - 24px));z-index:6;display:grid;gap:10px}#pump[hidden]{display:none}#pump header{display:flex;justify-content:space-between;font-size:19px}.pump-lcd{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#0c1410;border:1px solid #ffffff30;border-radius:8px;padding:10px}.pump-lcd small{display:block;color:#9fb8a4}.pump-lcd output{font:700 30px ui-monospace,monospace;color:#8ff0a8}#pump-grades{display:grid;gap:5px}#pump-grades button{text-align:left}#pump-grades .chosen{background:#dfeb98;color:#1d291d}.pump-tank{height:9px;background:#ffffff22;border-radius:5px;overflow:hidden}#pump-level{display:block;height:100%;background:#8ff0a8}#pump p{margin:0;font-size:14px;color:#d5ddc9}.pump-actions{display:flex;gap:8px}.pump-actions button{flex:1}
+#demo-banner{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);margin:0;padding:9px 16px;z-index:5;white-space:nowrap}#demo-banner[hidden]{display:none}.demo-mode .top,.demo-mode .map,.demo-mode .dash,.demo-mode .controls,.demo-mode .touch,.demo-mode #interact,.demo-mode #police-status,.demo-mode #job,.demo-mode #goal,.demo-mode #wrong-way{display:none}.demo-mode #main-menu{display:none}
+#radar-flash{position:fixed;inset:0;background:#ffe8ce;opacity:0;pointer-events:none;z-index:3}
+#view{filter:blur(calc(.8px + var(--impact-blur,0px))) saturate(calc(.88 * var(--impact-saturation,1))) contrast(1.08) sepia(.09)}
+#loading{position:fixed;inset:0;z-index:20;display:grid;place-content:center;justify-items:center;gap:22px;background:radial-gradient(ellipse at 50% 40%,#1c2a26 0%,#0f1815 70%);color:#f9f4e5;transition:opacity .5s ease}#loading.done{opacity:0;pointer-events:none}#loading h1{margin:0;font:italic 700 clamp(46px,9vw,108px)/.9 Georgia,serif;letter-spacing:-.06em}#loading h1 em{color:#e1eb9e;font-style:inherit}#loading .load-bar{position:relative;width:min(420px,70vw);height:10px;border-radius:6px;background:#ffffff1f;overflow:hidden}#loading .load-bar i{display:block;height:100%;width:100%;transform-origin:left center;transform:scaleX(.03);border-radius:6px;background:linear-gradient(90deg,#e1eb9e,#f6c744)}#loading .load-bar::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,#ffffff55 50%,transparent 70%);transform:translateX(-100%);animation:load-shine 1.4s linear infinite}@keyframes load-shine{to{transform:translateX(100%)}}#loading-text{font-size:14px;letter-spacing:.06em;color:#c3cebd;min-height:1.3em}#picture-vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 36%,#16100e78 100%)}
+#stack{position:absolute;top:268px;right:18px;width:210px;display:grid;gap:10px;z-index:2}.menu-open #stack,.indoors #stack{display:none}#money,#meter{display:grid;gap:2px;text-align:right;position:relative;padding:8px 14px 10px}#meter[hidden]{display:none}.tag{font-size:11px;letter-spacing:.14em;color:#c3cebd;text-align:left}#money-cash,#meter-fare{font:800 38px ui-monospace,monospace;color:#f6c744;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}#meter-fare{color:#fff}#money-debt{color:#ff9a7a;font-size:12px;text-align:right}#money-debt:empty{display:none}#money-flash{position:absolute;right:14px;top:-2px;font:800 24px ui-monospace,monospace;opacity:0;pointer-events:none;text-shadow:0 2px 6px #000}#money-flash.gain{color:#9be8a8}#money-flash.loss{color:#ff9a7a}#money-flash.show{animation:money-flash 2.4s ease-out}@keyframes money-flash{0%{opacity:1;transform:translateY(0) scale(1.25)}60%{opacity:1;transform:translateY(-8px) scale(1)}100%{opacity:0;transform:translateY(-30px)}}.bar{display:block;height:9px;border-radius:5px;background:#ffffff26;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;width:100%;background:#7fe08a;transition:width .2s}.bar i.low{background:#ff7a5a}.heat{display:block;height:4px;border-radius:3px;background:#ffffff1c;overflow:hidden;margin-top:4px}.heat i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f6c744,#e0432b)}#transmission,#weather,#camera,#horn,#surface,#location,.controls>small{display:none}#career-hud,#wallet{display:none}#meter[hidden]{display:none}.meter-top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-variant-numeric:tabular-nums}.meter-top b{font:700 26px ui-monospace,monospace;color:#f6c744;white-space:nowrap}.meter-row{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}#meter-time.late{color:#ff8a6a}.heat-row{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;opacity:.7}.heat-row.hot{opacity:1}.heat{display:block;height:7px;border-radius:4px;background:#ffffff22;overflow:hidden}.heat i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f6c744,#e0432b)}.indoors #view{filter:brightness(.9) contrast(1.12) saturate(1.1)}.indoors .dash,.indoors .map,.indoors .controls,.indoors #goal,.indoors #job{display:none}.picture-crisp #view{filter:blur(var(--impact-blur,0px)) saturate(var(--impact-saturation,1))}
+.picture-crisp #picture-vignette{display:none}
+#graphics-status{position:fixed;inset:auto 1rem 1rem;z-index:9;width:fit-content;margin:0 auto;padding:10px 16px}
+</style>
+<div id="loading" role="status" aria-live="polite"><h1>Valley <em>Roads</em></h1><div class="load-bar"><i id="loading-fill"></i></div><div id="loading-text">Loading the game</div></div>
+<canvas id="view" aria-label="Alder Valley world view"></canvas>
+<div id="picture-vignette" aria-hidden="true"></div>
+<main id="main-menu" aria-labelledby="menu-title">
+  <div class="menu-content">
+    <h1 id="menu-title">Valley <em>Roads</em></h1>
+    <div class="menu-primary">
+      <button id="freestyle" type="button" disabled>Drive <span aria-hidden="true">→</span></button>
+      <span id="preview-status" role="status"></span>
+    </div>
+    <details id="options" class="options"><summary>Options</summary>
+    <div class="graphics-settings">
+      <label for="graphics-detail">Graphics detail</label>
+      <select id="graphics-detail"><option value="low">Low</option><option value="high" selected>High</option></select>
+      <button id="picture-crisp" type="button" aria-pressed="false">Crisp</button>
+    </div>
+    <div class="graphics-settings seed-row">
+      <label for="seed-input">Seed</label><input id="seed-input" maxlength="24" autocomplete="off" spellcheck="false">
+      <button id="seed-new" type="button">Randomize</button>
+    </div>
+    <details id="custom-world" class="custom-world">
+      <summary>Custom world</summary>
+      <div id="world-sliders"></div>
+    </details>
+      </details>
+  </div>
+</main>
+<header class="top panel">
+  <div class="brand">VALLEY <span>ROADS</span></div>
+  <select id="vehicle" aria-label="Vehicle"></select>
+  <button id="settings" type="button">Settings</button>
+</header>
+<aside class="map panel"><canvas id="map" width="240" height="240" aria-label="Region map"></canvas><button id="map-mode" title="Switch between local and region maps">Local map</button></aside>
+<section class="dash panel" aria-label="Dashboard">
+  <div><span class="speed" id="speed">0</span> <span class="muted">km/h</span></div>
+  <div class="muted gear" id="gear">1 · 0 rpm</div>
+  <div class="muted" id="surface">Asphalt</div>
+  <div><span id="location">Alder Valley</span> <time id="clock" class="muted"></time></div>
+  <div class="limit-row"><span id="limit" aria-label="Speed limit">50</span><span id="fines" class="muted"></span></div>
+  <div class="fuel-row"><span class="muted">Fuel</span><span class="fuel-bar"><i id="fuel-level"></i></span><span id="fuel-text"></span><span id="wallet" class="muted"></span></div>
+  <div id="repair-status" role="status"></div>
+</section>
+
+<nav class="controls panel"><small class="muted">WASD / arrows · Space handbrake · F enter · G get out · J take fare · M missions · C camera · V weather · H horn · B replay</small><button id="transmission" aria-label="Toggle automatic or manual transmission">Auto</button><button id="weather" aria-label="Cycle weather">Clear</button><button id="camera">Camera</button><button id="repair" title="K to repair the current car">Repair</button><button id="reset" title="R to restart the drive">Reset</button><button id="horn" title="H to honk">Horn</button><button id="replay" title="B to watch the last seconds again">Replay</button></nav>
+<button id="interact" class="panel" hidden></button>
+<div id="stack"><section id="money" class="panel"><span class="tag">TOTAL</span><b id="money-cash"></b><i id="money-flash"></i><small id="money-debt"></small></section><aside id="meter" class="panel" hidden><span class="tag">FARE</span><b id="meter-fare">0.00 €</b><span class="bar"><i id="meter-bar"></i></span><span class="heat"><i id="meter-heat"></i></span></aside></div>
+<p id="job" class="panel" role="status" hidden></p>
+<div id="goal" class="panel" hidden aria-hidden="true"><svg id="goal-arrow" viewBox="-12 -14 24 28" width="42" height="42"><path d="M0-12 10 11 0 5-10 11Z" fill="#ffb04a" stroke="#101b18" stroke-width="1.5" stroke-linejoin="round"/></svg><span id="goal-dist"></span></div>
+<div class="touch"><div><button data-key="ArrowLeft" aria-label="Steer left">←</button> <button data-key="ArrowRight" aria-label="Steer right">→</button></div><div><button data-key="ArrowDown" aria-label="Brake or reverse">↓</button> <button data-key="ArrowUp" aria-label="Accelerate">↑</button></div></div>
+<div id="radar-flash" aria-hidden="true"></div>
+<p id="demo-banner" class="panel" hidden>Demo · press any key to play</p>
+<p id="replay-banner" class="panel" hidden>Replay · press any key to continue</p>
+<p id="wrong-way" class="panel" role="status" hidden>Wrong way</p>
+<p id="police-status" class="panel" role="status" hidden></p>
+<p class="panel" id="graphics-status" role="status" hidden>Graphics paused. Waiting for the browser to restore the connection.</p>
+<p class="error panel" id="error" role="alert" hidden></p>
+<script type="importmap">{"imports":{"three":"./src/vendor/three.module.js","three/addons/":"./src/vendor/jsm/"}}</script>
+<script>
+// The loading bar. Building the valley keeps the page busy for several seconds, so the bar is a compositor
+// animation (it keeps moving while the page is busy) that restarts at each real milestone the game reports.
+(() => {
+  const fill = document.getElementById('loading-fill'), text = document.getElementById('loading-text'), box = document.getElementById('loading');
+  const track = fill.parentElement;
+  let anim = null;
+  const now = () => track.getBoundingClientRect().width ? fill.getBoundingClientRect().width / track.getBoundingClientRect().width : 0;
+  function go(to, ms, label) {
+    const from = Math.min(to, now() || .03);
+    anim?.cancel();
+    fill.style.transform = `scaleX(${from})`;
+    anim = fill.animate([{ transform: `scaleX(${from})` }, { transform: `scaleX(${to})` }], { duration: ms, easing: 'cubic-bezier(.15,.6,.35,1)', fill: 'forwards' });
+    if (label) text.textContent = label;
+  }
+  go(.26, 3500);
+  const stages = [[.34, .7, 9000], [.74, .94, 3500], [.92, .98, 1500]];
+  window.loadProgress = (milestone, label) => {
+    if (milestone >= 1) {
+      go(1, 250, 'Ready');
+      setTimeout(() => { box.classList.add('done'); setTimeout(() => box.remove(), 600); }, 400);
+      return;
+    }
+    const stage = stages.find(item => item[0] === milestone);
+    if (stage) go(stage[1], stage[2], label);
+  };
+  // If the game cannot start, get out of the way so the error is readable.
+  window.addEventListener('unhandledrejection', () => { box.classList.add('done'); });
+})();
+</script>
+<script type="module">
+import('./src/game.js').catch(error => {
+  const message = document.querySelector('#error');
+  document.getElementById('loading')?.classList.add('done');
+  message.hidden = false;
+  message.textContent = location.protocol === 'file:'
+    ? 'Open the game through an HTTP server.'
+    : 'The driving view could not start. ' + (error?.message || String(error));
+  console.error(error);
+});
+</script>
+</html>
