@@ -1,7 +1,7 @@
 # Valley Roads
 
 A taxi driving sandbox in a generated valley. Pick up passengers, earn tips, pay the rent, dodge the police,
-and go home to a flat built entirely by code. No asset files; it runs offline.
+and go home to a flat built entirely by code. No asset files; it runs offline. Current state is buggy.
 
 **[Play it in your browser](https://markldn.github.io/valley-roads/)**
 
